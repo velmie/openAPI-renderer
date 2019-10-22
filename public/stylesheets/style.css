@@ -1,8 +1,44 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+div {
+  text-align: center;
 }
 
-a {
-  color: #00B7FF;
+.title h3 {
+  font-family: 'Merriweather', serif;
+  font-size: 30px;
+  letter-spacing: 1px;
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  display: inline-block;
+  color: #134c5c;
+}
+
+.title h3:before {
+  content: "";
+  position: absolute;
+  top: calc(50% - 6px);
+  left: 0;
+  right: 0;
+  height: 15px;
+  background: #A6D8CB;
+  z-index: -1;
+}
+
+.title span {
+  background: white;
+  padding: 0 6px;
+  margin-left: 2px;
+}
+
+.selectWrapper {
+  margin-bottom: 20px;
+  display: inline-block;
+  padding: 20px 40px;
+  background-color: #fff;
+  text-align: center;
+}
+
+.selectWrapper,
+.selectWrapper select {
+  font-size: 20px;
 }
