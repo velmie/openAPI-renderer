@@ -9,8 +9,11 @@ function compareByTimestamp(a, b) {
   return 0;
 }
 
-function renderReleaseDocs(filepath) {
-  const link = '//localhost:3000/docs?filepath=' + filepath;
+function renderReleaseDocs(release) {
+  const params = new URLSearchParams();
+  params.append('api', release);
+
+  const link = './docs?' + params.toString();
   const options = {
     scrollYOffset: 5
   };
@@ -24,12 +27,13 @@ function showReleaseDocs(release) {
   if (ignoreReleaseChanges) {
     return;
   }
+renderReleaseDocs(release);
+//  if (release) {
+//    getFilePath(release).then((filepath) => {
+//      renderReleaseDocs(filepath);
+//    });
+//  }
 
-  if (release) {
-    getFilePath(release).then((filepath) => {
-      renderReleaseDocs(filepath);
-    });
-  }
 }
 
 async function getSchemasByService() {
@@ -43,7 +47,7 @@ async function getFilePath(release) {
 }
 
 async function init() {
-  const schemasByService = await getSchemasByService();
+  const schemasByService = schemas; //await getSchemasByService();
   
   $services = $('#services');
   $releases = $('#releases');
