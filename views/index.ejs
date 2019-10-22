@@ -2,14 +2,28 @@
 <html>
   <head>
     <title><%= title %></title>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <script src="/javascripts/redoc.standalone_2.0.js"></script>
+    <!-- <script src="/javascripts/redoc.standalone_2.0.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <p><button id="update-button">Update Docs</button></p>
+    <div class="title">
+      <h3>
+        <span><%= title %></span>
+      </h3>
+    </div>
+    <div class="selectWrapper">
+      <select id="services"></select>
+    </div>
+    <div class="selectWrapper">
+      <select>
+        <optgroup label="Releases" id="releases"></optgroup>
+      </select>
+    </div>
+          
     <div id="redoc-container"></div>
     <script src="/javascripts/index.js"></script>
   </body>
