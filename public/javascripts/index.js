@@ -27,76 +27,51 @@ function showReleaseDocs(release) {
   if (ignoreReleaseChanges) {
     return;
   }
-renderReleaseDocs(release);
-//  if (release) {
-//    getFilePath(release).then((filepath) => {
-//      renderReleaseDocs(filepath);
-//    });
-//  }
-
-}
-
-async function getSchemasByService() {
-  const response = await axios.get('/schemas');
-  return response.data;
-}
-
-async function getFilePath(release) {
-  const response = await axios.post('/schemas/document', { release });
-  return response.data;
+  renderReleaseDocs(release);
 }
 
 async function init() {
-  const schemasByService = schemas; //await getSchemasByService();
-  
+  const schemasByService = schemas;
+
   $services = $('#services');
   $releases = $('#releases');
 
-  $services.html('<option value="">Select a Service</option>');
+  $services.html('<option hidden value="">Select a Service</option>');
   Object.keys(schemasByService).forEach((key) => {
     $services.append(`<option value="${key}">${key}</option>`);
   });
 
   $services.on('change', (e) => {
     const { value } = e.target;
-
     $releases.html('');
-    if (value) {
-      const options = schemasByService[value];
 
-      options.sort(compareByTimestamp);
-      options.forEach(({ key, sortKey }) => {
-        $releases.append(`<option value="${key}">${sortKey}</option>`);
-      });
+    const options = schemasByService[value];
 
-      $releases.parents('select').prop('disabled', options.length < 2);
+    options.sort(compareByTimestamp);
+    options.forEach(({ key, sortKey }) => {
+      $releases.append(`<option value="${key}">${sortKey}</option>`);
+    });
 
-      showReleaseDocs(options[0].key);
-    } else {
+    $releases.parents('select').prop('disabled', options.length < 2);
 
-      $releases.html('')
-      showReleaseDocs(null);
-    }
+    showReleaseDocs(options[0].key);
+
   });
+  
 
   $releases.parents('select').on('change', (e) => {
     showReleaseDocs(e.target.value);
   });
 
-//   window.addEventListener('popstate', () => {
-//     $services.val('').trigger('change');
-//   });
-//   console.log('window.location.hash ', window.location.hash)
-//   if (window.location.hash) {
-//     const release = window.location.hash.substr(1);
-//     const svc = release.split('/').slice(0, 2).join('::');
-// console.log('svc ', svc)
-//     ignoreReleaseChanges = true;
-//     $services.val(svc).trigger('change');
-//     ignoreReleaseChanges = false;
-
-//     $releases.parents('select').val(release).trigger('change');
-//   }
+  if (cookies) {
+    showReleaseDocs(cookies.api);
+    $(`#services option[value="${cookies.serviceKey}"]`)
+    .attr('selected', 'selected')
+    .change();
+    $(`#releases option[value="${cookies.api}"]`)
+    .attr('selected', 'selected')
+    .change();
+  }
 }
 
 window.onload = function() {

@@ -6,11 +6,12 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    <!-- <script src="/javascripts/redoc.standalone_2.0.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script>
+    
+    <script src="/javascripts/redoc.standalone_2.0.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script> -->
     <script>
       const schemas = <%- JSON.stringify(schemas); %>;
-      const currentSchema = <%- JSON.stringify(currentSchema); %>;
+      const cookies = <%- JSON.stringify(cookies); %>;
     </script>
   </head>
   <body>
@@ -20,7 +21,7 @@
       </h3>
     </div>
     <div class="selectWrapper">
-      <select id="services"></select>
+      <select label="Services" id="services"></select>
     </div>
     <div class="selectWrapper">
       <select>
@@ -29,6 +30,8 @@
     </div>
           
     <div id="redoc-container"></div>
+    
     <script src="/javascripts/index.js"></script>
+    
   </body>
 </html>

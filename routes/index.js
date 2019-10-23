@@ -16,9 +16,9 @@ router.get('/', async function(req, res, next) {
     console.log('HIT: Fetched schemas');
   }
 
-const currentSchema = req.cookies.api ? req.cookies.api : null;
+  const cookies = req.cookies.api ? req.cookies : null;
 
-  res.render('index', { schemas, currentSchema, title: 'API documentation' });
+  res.render('index', { schemas, cookies, title: 'API documentation' });
 });
 
 module.exports = router;
