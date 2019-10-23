@@ -6,7 +6,9 @@ const fs = require('fs');
 const { repository } = require('../config');
 const { buildKeys } = require('../helpers');
 
-const { COOKIE_TTL } = process.env;
+const { 
+  COOKIE_TTL = 2592000000,
+} = process.env;
 
 router.get('/', async function (req, res, next) {
   const apiParam = req.query.api;
