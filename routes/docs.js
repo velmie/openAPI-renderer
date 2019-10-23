@@ -3,21 +3,24 @@ const router = express.Router();
 const path = require('path');
 const fs = require('fs');
 const { repo } = require('../config');
+const { buildKeys } = require('../helpers');
 
 router.get('/', async function (req, res, next) {
 
   let filePath
   const apiParam = req.query.api;
+  const { serviceKey, sortKey } = buildKeys(apiParam);
+
   try {
+    const options = {
+      maxAge: 1000 * 60 * 60 * 24 * 30,
+      httpOnly: true, 
+    }
 
-    let options = {
-      maxAge: 1000 * 60 * 60 * 24 * 30, // would expire after 15 minutes
-      httpOnly: true, // The cookie only accessible by the web server
-      signed: false // Indicates if the cookie should be signed
-  }
+    res.cookie('api', apiParam, options)
+      .cookie('serviceKey', serviceKey, options)
+      .cookie('sortKey', sortKey, options);
 
-
-    res.cookie('api',apiParam, options);
     filePath = await repo.getFilePath(apiParam);
   } catch (e) {
     console.error(e);
