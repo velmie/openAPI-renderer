@@ -1,20 +1,14 @@
-const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const path = require('path');
+const createError = require('http-errors');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const docsRouter = require('./routes/docs');
 
 const app = express();
-
-app.all('/*', function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  next();
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,6 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.all('/*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/docs', docsRouter);
