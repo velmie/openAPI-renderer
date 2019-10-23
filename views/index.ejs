@@ -2,15 +2,13 @@
 <html>
   <head>
     <title><%= title %></title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link rel='stylesheet' href='/stylesheets/style.css' />
-    
     <script src="/javascripts/redoc.standalone_2.0.js"></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/redoc@next/bundles/redoc.standalone.js"> </script> -->
+    <script src="/javascripts/jquery-1.11.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
     <script>
-      const schemas = <%- JSON.stringify(schemas); %>;
+      const bucketSchema = <%- JSON.stringify(bucketSchema); %>;
       const cookies = <%- JSON.stringify(cookies); %>;
     </script>
   </head>
@@ -20,15 +18,17 @@
         <span><%= title %></span>
       </h3>
     </div>
-    <div class="selectWrapper">
-      <select label="Services" id="services"></select>
+    <div class="div-dropdown">
+
+      <div class="custom-dropdown">
+        <select label="Service" id="service"></select>
+      </div>
+      <div class="custom-dropdown">
+        <select label="Version" id="version"></select>
+      </div>
+         
     </div>
-    <div class="selectWrapper">
-      <select>
-        <optgroup label="Releases" id="releases"></optgroup>
-      </select>
-    </div>
-          
+
     <div id="redoc-container"></div>
     
     <script src="/javascripts/index.js"></script>

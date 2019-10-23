@@ -1,24 +1,25 @@
-var express = require('express');
-var router = express.Router();
-const { repo, cache } = require('../config');
+const express = require('express');
+const router = express.Router();
+const { repository, cache } = require('../config');
 
 /* GET home page. */
 router.get('/', async function(req, res, next) {
 
-  let schemas = cache.get('schemas');
+  let bucketSchema = cache.get('schema');
 
-  if (!schemas) {
-    schemas = await repo.get();
+  if (!bucketSchema) {
+    bucketSchema = await repository.get();
+    
+    cache.set('schema', bucketSchema);
 
-    cache.set('schemas', schemas);
     console.log('MISS: Fetched schemas');
   } else {
     console.log('HIT: Fetched schemas');
   }
 
-  const cookies = req.cookies.api ? req.cookies : null;
+  const cookies = req.cookies.key ? req.cookies : null;
 
-  res.render('index', { schemas, cookies, title: 'API documentation' });
+  res.render('index', { bucketSchema, cookies, title: 'API documentation' });
 });
 
 module.exports = router;

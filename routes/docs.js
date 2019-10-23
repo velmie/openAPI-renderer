@@ -2,29 +2,32 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
-const { repo } = require('../config');
+
+const { repository } = require('../config');
 const { buildKeys } = require('../helpers');
 
+const { COOKIE_TTL } = process.env;
+
 router.get('/', async function (req, res, next) {
+  const apiParam = req.query.api;
+  const { service } = buildKeys(apiParam);
 
   let filePath
-  const apiParam = req.query.api;
-  const { serviceKey, sortKey } = buildKeys(apiParam);
-
+  
   try {
     const options = {
-      maxAge: 1000 * 60 * 60 * 24 * 30,
+      maxAge: COOKIE_TTL,
       httpOnly: true, 
     }
 
-    res.cookie('api', apiParam, options)
-      .cookie('serviceKey', serviceKey, options)
-      .cookie('sortKey', sortKey, options);
+    res.cookie('key', apiParam, options)
+      .cookie('service', service, options);
 
-    filePath = await repo.getFilePath(apiParam);
-  } catch (e) {
-    console.error(e);
-    next(e);
+    filePath = await repository.getFilePath(apiParam);
+
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 
   filePath = path.resolve(__dirname + `/../${filePath}`);
@@ -34,9 +37,11 @@ router.get('/', async function (req, res, next) {
 
   res.on('finish', function() {
     try {
+
       fs.unlinkSync(filePath); 
+
     } catch(err) {
-      console.log('Error', err);
+      console.error(err);
     }
   });
 });

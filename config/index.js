@@ -25,7 +25,7 @@ const s3 = new AWS.S3({
     apiVersion: S3_API_VERSION,
 });
 
-const repo = SchemaRepository(s3, {
+const repository = SchemaRepository(s3, {
     Bucket: S3_BUCKET,
     Prefix: S3_PREFIX,
     MaxKeys: S3_OBJECTS_PER_PAGE,
@@ -33,4 +33,4 @@ const repo = SchemaRepository(s3, {
 
 const cache = Cache(CACHE_TTL, CACHE_MAX_SIZE);
 
-module.exports = { repo, cache };
+module.exports = { repository, cache };
