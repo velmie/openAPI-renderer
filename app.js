@@ -3,12 +3,27 @@ const logger = require('morgan');
 const path = require('path');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
+const basicAuth = require('express-basic-auth')
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const docsRouter = require('./routes/docs');
 
+const {
+  AUTH_USER,
+  AUTH_PASS,
+} = process.env;
+
 const app = express();
+
+if(AUTH_USER && AUTH_PASS) {
+  app.use(basicAuth({
+    users: {
+      [AUTH_USER]: AUTH_PASS,
+    },
+    challenge: true,
+  }));
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
