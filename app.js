@@ -3,7 +3,7 @@ const logger = require('morgan');
 const path = require('path');
 const createError = require('http-errors');
 const cookieParser = require('cookie-parser');
-const basicAuth = require('express-basic-auth')
+const basicAuth = require('express-basic-auth');
 require('dotenv').config();
 
 const indexRouter = require('./routes/index');
@@ -16,7 +16,7 @@ const {
 
 const app = express();
 
-if(AUTH_USER && AUTH_PASS) {
+if (AUTH_USER && AUTH_PASS) {
   app.use(basicAuth({
     users: {
       [AUTH_USER]: AUTH_PASS,
@@ -39,12 +39,12 @@ app.use('/', indexRouter);
 app.use('/docs', docsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

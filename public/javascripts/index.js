@@ -1,22 +1,22 @@
+/* eslint-disable no-undef */
 function getFileUrl(key) {
   const params = new URLSearchParams();
   params.append('api', key);
 
-  const url = './docs?' + params.toString();
+  const url = `./docs?${params.toString()}`;
 
   return url;
 }
 
 function renderDocumentation(key) {
   const url = getFileUrl(key);
- 
-  Redoc.init(url, { scrollYOffset: 5 }, document.getElementById('redoc-container'), function () {
+
+  Redoc.init(url, { scrollYOffset: 5 }, document.getElementById('redoc-container'), () => {
     console.log('Rendered: ', url);
   });
 }
 
 async function init() {
-
   $('#service').html('<option hidden value="">Select a Service</option>');
   $('#version').html('<option hidden value="">Select a Version</option>');
 
@@ -37,7 +37,7 @@ async function init() {
 
     renderDocumentation(options[0].key);
   });
-  
+
   $('#version').on('change', ({ target: { value } }) => {
     renderDocumentation(value);
   });
@@ -54,6 +54,6 @@ async function init() {
   }
 }
 
-window.onload = function() {
+window.onload = () => {
   init();
 };
