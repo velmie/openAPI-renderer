@@ -10,6 +10,7 @@
     * [S3](#s3)
     * [Config](#config)
 * [Run locally](#run-locally)
+    * [The Docker way](#the-docker-way)
 
 ## Summary
 * Automatically scans S3 bucket for `openapi.yml` files, and populates service/version dropdown menus
@@ -66,9 +67,22 @@ Should have a bucket on [AWS S3](https://aws.amazon.com/ru/) with the following 
 3. _(Modify .env)_
 4. `npm start`
 
+#### Starting the system:
 ```
-    localhost:3000
+localhost:3000
 ```
+
+#### The Docker way
+[velmie/openapi-renderer](https://hub.docker.com/r/velmie/openapi-renderer)
+```
+docker pull velmie/openapi-renderer
+
+docker run -it -p 3000:80 -e S3_AWS_ACCESS_KEY_ID="" -e S3_AWS_SECRET_ACCESS_KEY="" -e S3_BUCKET="" velmie/openapi-renderer
+```
+- Required environment variables:
+    * S3_AWS_ACCESS_KEY_ID
+    * S3_AWS_SECRET_ACCESS_KEY
+    * S3_BUCKET
 
 ```bash
 DEBUG=openapi-renderer:* npm start
