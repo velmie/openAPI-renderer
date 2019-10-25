@@ -9,6 +9,7 @@
 * [Setup](#setup)
     * [S3](#s3)
     * [Config](#config)
+    * [Authentication](#authentication)
 * [Run locally](#run-locally)
     * [The Docker way](#the-docker-way)
 
@@ -58,6 +59,18 @@ Should have a bucket on [AWS S3](https://aws.amazon.com/ru/) with the following 
     * S3_API_VERSION      = '2006-03-01'
     * S3_OBJECTS_PER_PAGE = 1000
     * COOKIE_TTL          = 2592000000 //1month
+    * AUTH_USER           = ""
+    * AUTH_PASS           = ""
+
+**[⬆ back to top](#openapi-renderer)**
+
+#### Authentication
+[Express-basic-auth](https://www.npmjs.com/package/express-basic-auth) - built-in middleware for authorization.
+You can specify environment variables:
+ - AUTH_USER
+ - AUTH_PASS
+
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) If you don't specify environment variables then authorization will be missing
 
 **[⬆ back to top](#openapi-renderer)**
 
@@ -66,6 +79,11 @@ Should have a bucket on [AWS S3](https://aws.amazon.com/ru/) with the following 
 2. `cp .env.sample .env`
 3. _(Modify .env)_
 4. `npm start`
+
+#### For debug:
+```bash
+DEBUG=openapi-renderer:* npm start
+```
 
 #### Starting the system:
 ```
@@ -83,8 +101,8 @@ docker run -it -p 3000:80 -e S3_AWS_ACCESS_KEY_ID="" -e S3_AWS_SECRET_ACC
     * S3_AWS_ACCESS_KEY_ID
     * S3_AWS_SECRET_ACCESS_KEY
     * S3_BUCKET
+- Optional environment variables for [authentication](#authentication):
+    * AUTH_USER
+    * AUTH_PASS
 
-```bash
-DEBUG=openapi-renderer:* npm start
-```
 **[⬆ back to top](#openapi-renderer)**
