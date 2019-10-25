@@ -1,0 +1,19 @@
+name: Code quality check
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  check_code:
+    name: Code check
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '8.10.0'
+      - run: npm install
+      - name: Run lint
+        run: npm run lint
