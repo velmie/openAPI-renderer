@@ -8,7 +8,7 @@ helpers.buildKeys = (url) => {
   const date = moment.unix(timestamp).format('YYYY-MM-DD HH:mm');
 
   const service = `${app}:${stage}`;
-  const version = `${date} - ${edition}`;
+  const version = `${date !== 'Invalid date' ? date : ''}${date && edition ? '-' : ''}${date === 'Invalid date' && !edition ? timestamp : (edition || '')}`;
 
   return { service, version };
 };
