@@ -33,7 +33,7 @@ Should have a bucket on [AWS S3](https://aws.amazon.com/ru/) with the following 
     [BUCKET]
     |__[STAGE]
        |__[SERVICE]
-          |__[TIMESTAMP-VERSION] || [TIMESTAMP] || [VERSION] 
+          |__[TIMESTAMP-VERSION] || [VERSION-TIMESTAMP] || [TIMESTAMP] || [VERSION] 
              |__openapi.yml
    
 ```
