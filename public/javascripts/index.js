@@ -1,14 +1,28 @@
 /* eslint-disable no-undef */
-function getFileUrl(key) {
+
+const serviceSelect = $('#service');
+const versionSelect = $('#version');
+
+function createSearchParams(key) {
   const params = new URLSearchParams();
   params.append('api', key);
+  return params.toString();
+}
 
-  const url = `./docs?${params.toString()}`;
+function parseSearchParams({ search }) {
+  const key = (new URLSearchParams(search)).get('api');
+  const [stage, app] = key.split('/');
+  const service = `${app}:${stage}`;
+  return { key, service };
+}
 
+function getFileUrl(key) {
+  const params = createSearchParams(key);
+  const url = `./docs?${params}`;
   return url;
 }
 
-function renderDocumentation(key) {
+async function renderDocumentation(key) {
   const url = getFileUrl(key);
 
   Redoc.init(url, { scrollYOffset: 5 }, document.getElementById('redoc-container'), () => {
@@ -16,43 +30,60 @@ function renderDocumentation(key) {
   });
 }
 
-async function init() {
-  $('#service').html('<option hidden value="">Select a Service</option>');
-  $('#version').html('<option hidden value="">Select a Version</option>');
+function fillInSelect(value) {
+  const options = bucketSchema[value];
+  versionSelect.html('');
 
-  Object.keys(bucketSchema).forEach((service) => {
-    $('#service').append(`<option value="${service}">${service}</option>`);
+  options.forEach(({ key, version }) => {
+    versionSelect.append(`<option value="${key}">${version}</option>`);
   });
+}
 
-  $('#service').on('change', ({ target: { value } }) => {
-    const options = bucketSchema[value];
-
-    $('#version').html('');
-
-    options.forEach(({ key, version }) => {
-      $('#version').append(`<option value="${key}">${version}</option>`);
-    });
-
-    $('#version').prop('disabled', options.length < 2);
-
-    renderDocumentation(options[0].key);
-  });
-
-  $('#version').on('change', ({ target: { value } }) => {
-    renderDocumentation(value);
-  });
-
-  if (cookies) {
-    const { key, service } = cookies;
-
-    $(`#service option[value="${service}"]`)
-      .attr('selected', 'selected')
-      .change();
-    $(`#version option[value="${key}"]`)
-      .attr('selected', 'selected')
-      .change();
+function changeURL(key, replace = false) {
+  const params = createSearchParams(key);
+  if (replace) {
+    window.history.replaceState(params, '', `?${params}`);
+  } else {
+    window.history.pushState(params, '', `?${params}`);
   }
 }
+
+function changeSelects({ key, service }) {
+  serviceSelect.val(service);
+  fillInSelect(service);
+  versionSelect.val(key);
+  renderDocumentation(key);
+  changeURL(key, true);
+}
+
+function init() {
+  serviceSelect.html('<option hidden value="">Select a Service</option>');
+  versionSelect.html('<option hidden value="">Select a Version</option>');
+
+  Object.keys(bucketSchema).forEach((service) => {
+    serviceSelect.append(`<option value="${service}">${service}</option>`);
+  });
+
+  serviceSelect.on('change', ({ target: { value } }) => {
+    fillInSelect(value);
+    versionSelect.trigger('change');
+  });
+
+  versionSelect.on('change', ({ target: { value } }) => {
+    renderDocumentation(value);
+    changeURL(value);
+  });
+
+  if (window.location.search) {
+    changeSelects(parseSearchParams(window.location));
+  } else if (cookies) {
+    changeSelects(cookies);
+  }
+}
+
+window.addEventListener('popstate', () => {
+  changeSelects(parseSearchParams(window.location));
+});
 
 window.onload = () => {
   init();
