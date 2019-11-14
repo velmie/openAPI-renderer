@@ -22,10 +22,16 @@ function getFileUrl(key) {
   return url;
 }
 
-async function renderDocumentation(key) {
+function renderDocumentation(key) {
   const url = getFileUrl(key);
 
-  Redoc.init(url, { scrollYOffset: 5 }, document.getElementById('redoc-container'), () => {
+  // Need to create clone of element.
+  // This will help remove unwanted properties of redoc-container (after error)
+  const redocContainer = document.getElementById('redoc-container');
+  const redocContainerClone = redocContainer.cloneNode();
+  redocContainer.replaceWith(redocContainerClone);
+
+  Redoc.init(url, { scrollYOffset: 5 }, redocContainerClone, () => {
     console.log('Rendered: ', url);
   });
 }
