@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     console.log('HIT: Fetched schemas');
   }
 
-  const cookies = req.cookies.key ? req.cookies : null;
+  const cookies = req.cookies.apiId ? req.cookies : null;
 
   res.render('index', { bucketSchema, cookies, title: 'API documentation' });
 });

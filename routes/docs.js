@@ -12,8 +12,8 @@ const {
 } = process.env;
 
 router.get('/', async (req, res, next) => {
-  const apiParam = req.query.api;
-  const { service } = buildKeys(apiParam);
+  const apiId = req.query.api;
+  const { service } = buildKeys(apiId);
 
   let filePath;
 
@@ -23,10 +23,10 @@ router.get('/', async (req, res, next) => {
       httpOnly: true,
     };
 
-    res.cookie('key', apiParam, options)
+    res.cookie('apiId', apiId, options)
       .cookie('service', service, options);
 
-    filePath = await repository.getFilePath(apiParam);
+    filePath = await repository.getFilePath(apiId);
   } catch (err) {
     console.error(err);
     next(err);
