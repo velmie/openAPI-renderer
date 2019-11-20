@@ -3,27 +3,33 @@
 const serviceSelect = $('#service');
 const versionSelect = $('#version');
 
-function createSearchParams(key) {
+function createSearchParams(state) {
+  const { apiId } = state;
+
   const params = new URLSearchParams();
-  params.append('api', key);
+  params.append('api', apiId);
   return params.toString();
 }
 
 function parseSearchParams({ search }) {
-  const key = (new URLSearchParams(search)).get('api');
-  const [stage, app] = key.split('/');
-  const service = `${app}:${stage}`;
-  return { key, service };
+  const apiId = (new URLSearchParams(search)).get('api');
+  const [stage, app] = apiId.split('/');
+
+  const state = {
+    apiId,
+    service: `${app}:${stage}`,
+  };
+  return state;
 }
 
-function getFileUrl(key) {
-  const params = createSearchParams(key);
+function getFileUrl(state) {
+  const params = createSearchParams(state);
   const url = `./docs?${params}`;
   return url;
 }
 
-function renderDocumentation(key) {
-  const url = getFileUrl(key);
+function renderDocumentation(state) {
+  const url = getFileUrl(state);
 
   // Need to create clone of element.
   // This will help remove unwanted properties of redoc-container (after error)
@@ -36,8 +42,8 @@ function renderDocumentation(key) {
   });
 }
 
-function fillInSelect(value) {
-  const options = bucketSchema[value];
+function fillInSelect(service) {
+  const options = bucketSchema[service];
   versionSelect.html('');
 
   options.forEach(({ key, version }) => {
@@ -45,8 +51,8 @@ function fillInSelect(value) {
   });
 }
 
-function changeURL(key, replace = false) {
-  const params = createSearchParams(key);
+function changeURL(state, replace = false) {
+  const params = createSearchParams(state);
   if (replace) {
     window.history.replaceState(params, '', `?${params}`);
   } else {
@@ -54,12 +60,15 @@ function changeURL(key, replace = false) {
   }
 }
 
-function changeSelects({ key, service }) {
+function changeSelects(state) {
+  const { apiId, service } = state;
+
   serviceSelect.val(service);
   fillInSelect(service);
-  versionSelect.val(key);
-  renderDocumentation(key);
-  changeURL(key, true);
+  versionSelect.val(apiId);
+
+  renderDocumentation(state);
+  changeURL(state, true);
 }
 
 function init() {
@@ -70,14 +79,21 @@ function init() {
     serviceSelect.append(`<option value="${service}">${service}</option>`);
   });
 
-  serviceSelect.on('change', ({ target: { value } }) => {
-    fillInSelect(value);
+  serviceSelect.on('change', ({ target }) => {
+    const service = target.value;
+
+    fillInSelect(service);
     versionSelect.trigger('change');
   });
 
-  versionSelect.on('change', ({ target: { value } }) => {
-    renderDocumentation(value);
-    changeURL(value);
+  versionSelect.on('change', ({ target }) => {
+    const state = {
+      service: serviceSelect.val(),
+      apiId: target.value,
+    };
+
+    renderDocumentation(state);
+    changeURL(state);
   });
 
   if (window.location.search) {
