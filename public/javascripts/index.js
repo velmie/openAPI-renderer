@@ -3,6 +3,14 @@
 const serviceSelect = $('#service');
 const versionSelect = $('#version');
 
+function historyReplace(params) {
+  window.history.replaceState(params, '', `?${params}`);
+}
+
+function historyPush(params) {
+  window.history.pushState(params, '', `?${params}`);
+}
+
 function createSearchParams(state) {
   const { apiId } = state;
 
@@ -54,9 +62,9 @@ function fillInSelect(service) {
 function changeURL(state, replace = false) {
   const params = createSearchParams(state);
   if (replace) {
-    window.history.replaceState(params, '', `?${params}`);
+    historyReplace(params);
   } else {
-    window.history.pushState(params, '', `?${params}`);
+    historyPush(params);
   }
 }
 
@@ -107,6 +115,4 @@ window.addEventListener('popstate', () => {
   changeSelects(parseSearchParams(window.location));
 });
 
-window.onload = () => {
-  init();
-};
+$(window).on('load', init);
