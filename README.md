@@ -44,6 +44,34 @@ Should have a bucket on [AWS S3](https://aws.amazon.com/ru/) with the following 
 * `TIMESTAMP` - timestamp;
 * `openapi.yml` - .yml document;
 
+For example:
+```
+    bucket-api-documentation
+    |___dev
+    |   |___mobileApp
+    |   |   |___1572347149-v1.0.0 
+    |   |   |   |___openapi.yml    
+    |   |   |___1573159917
+    |   |       |___openapi.yml
+    |   |
+    |   |___backendApp 
+    |       |___v1.0.0-1572347149
+    |       |   |___openapi.yml   
+    |       |___v1.0.0 
+    |           |___openapi.yml 
+    |
+    |___stage
+        |___mobileApp   
+        |   |___v1.0.0-1572347149
+        |       |___openapi.yml
+        |
+        |___frontendApp 
+            |___v1.0.1
+            |   |___openapi.yml   
+            |___v1.0.0 
+                |___openapi.yml   
+```
+
 **[⬆ back to top](#openapi-renderer)**
 
 #### Config
