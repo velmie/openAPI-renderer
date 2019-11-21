@@ -1,5 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint prefer-arrow-callback: ["error", { "allowNamedFunctions": true }] */
 /* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
 
 const $serviceSelect = $('#service');
@@ -85,8 +84,6 @@ function updateViewByState(state, flagNewState = false) {
 }
 
 function renderServices() {
-  $serviceSelect.html('');
-
   Object.keys(bucketSchema).forEach((service) => {
     $serviceSelect.append(`<option value="${service}">${service}</option>`);
   });
@@ -118,7 +115,8 @@ function renderInitialView() {
   renderServices();
 }
 
-window.addEventListener('popstate', () => {
+$(window).bind('popstate', () => {
+  $serviceSelect.html('');
   const state = getStateFromUrl(window.location.search);
   renderUpdatedView(state);
 });
@@ -139,7 +137,7 @@ $versionSelect.on('change', ({ target }) => {
   updateViewByState(state, true);
 });
 
-$(function init() {
+$(() => {
   pageState = getPageState();
   pageState ? renderUpdatedView(pageState) : renderInitialView();
 });
