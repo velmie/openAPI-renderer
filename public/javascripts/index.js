@@ -1,7 +1,17 @@
 /* eslint-disable no-undef */
+/* eslint prefer-arrow-callback: ["error", { "allowNamedFunctions": true }] */
+/* eslint no-unused-expressions: ["error", { "allowTernary": true }] */
 
-const serviceSelect = $('#service');
-const versionSelect = $('#version');
+const $serviceSelect = $('#service');
+const $versionSelect = $('#version');
+
+function historyReplace(params) {
+  window.history.replaceState(params, '', `?${params}`);
+}
+
+function historyPush(params) {
+  window.history.pushState(params, '', `?${params}`);
+}
 
 function createSearchParams(state) {
   const { apiId } = state;
@@ -9,17 +19,6 @@ function createSearchParams(state) {
   const params = new URLSearchParams();
   params.append('api', apiId);
   return params.toString();
-}
-
-function parseSearchParams({ search }) {
-  const apiId = (new URLSearchParams(search)).get('api');
-  const [stage, app] = apiId.split('/');
-
-  const state = {
-    apiId,
-    service: `${app}:${stage}`,
-  };
-  return state;
 }
 
 function getFileUrl(state) {
@@ -42,71 +41,105 @@ function renderDocumentation(state) {
   });
 }
 
-function fillInSelect(service) {
-  const options = bucketSchema[service];
-  versionSelect.html('');
+function getStateFromUrl(search) {
+  const apiId = (new URLSearchParams(search)).get('api');
+  const [stage, app] = apiId.split('/');
 
-  options.forEach(({ key, version }) => {
-    versionSelect.append(`<option value="${key}">${version}</option>`);
-  });
+  const state = {
+    apiId,
+    service: `${app}:${stage}`,
+  };
+  return state;
 }
 
-function changeURL(state, replace = false) {
-  const params = createSearchParams(state);
-  if (replace) {
-    window.history.replaceState(params, '', `?${params}`);
-  } else {
-    window.history.pushState(params, '', `?${params}`);
-  }
+function getStateFromCookies(cookies) {
+  const state = {
+    service: cookies.service,
+    apiId: cookies.apiId,
+  };
+
+  return state;
 }
 
-function changeSelects(state) {
-  const { apiId, service } = state;
-
-  serviceSelect.val(service);
-  fillInSelect(service);
-  versionSelect.val(apiId);
-
-  renderDocumentation(state);
-  changeURL(state, true);
-}
-
-function init() {
-  serviceSelect.html('<option hidden value="">Select a Service</option>');
-  versionSelect.html('<option hidden value="">Select a Version</option>');
-
-  Object.keys(bucketSchema).forEach((service) => {
-    serviceSelect.append(`<option value="${service}">${service}</option>`);
-  });
-
-  serviceSelect.on('change', ({ target }) => {
-    const service = target.value;
-
-    fillInSelect(service);
-    versionSelect.trigger('change');
-  });
-
-  versionSelect.on('change', ({ target }) => {
-    const state = {
-      service: serviceSelect.val(),
-      apiId: target.value,
-    };
-
-    renderDocumentation(state);
-    changeURL(state);
-  });
+function getPageState() {
+  let state;
 
   if (window.location.search) {
-    changeSelects(parseSearchParams(window.location));
+    state = getStateFromUrl(window.location.search);
   } else if (cookies) {
-    changeSelects(cookies);
+    state = getStateFromCookies(cookies);
   }
+
+  return state;
+}
+
+function updateViewByState(state, flagNewState = false) {
+  renderDocumentation(state);
+  const params = createSearchParams(state);
+
+  if (flagNewState) {
+    historyPush(params);
+  } else {
+    historyReplace(params);
+  }
+}
+
+function renderServices() {
+  $serviceSelect.html('');
+
+  Object.keys(bucketSchema).forEach((service) => {
+    $serviceSelect.append(`<option value="${service}">${service}</option>`);
+  });
+}
+
+function renderVersionsByService(service) {
+  const options = bucketSchema[service];
+  $versionSelect.html('');
+
+  options.forEach(({ key, version }) => {
+    $versionSelect.append(`<option value="${key}">${version}</option>`);
+  });
+}
+
+function renderUpdatedView(state) {
+  const { apiId, service } = state;
+  updateViewByState(state);
+
+  renderServices();
+  $serviceSelect.val(service);
+  renderVersionsByService(service);
+  $versionSelect.val(apiId);
+}
+
+function renderInitialView() {
+  $serviceSelect.html('<option hidden value="">Select a Service</option>');
+  $versionSelect.html('<option hidden value="">Select a Version</option>');
+
+  renderServices();
 }
 
 window.addEventListener('popstate', () => {
-  changeSelects(parseSearchParams(window.location));
+  const state = getStateFromUrl(window.location.search);
+  renderUpdatedView(state);
 });
 
-window.onload = () => {
-  init();
-};
+$serviceSelect.on('change', ({ target }) => {
+  const service = target.value;
+
+  renderVersionsByService(service);
+  $versionSelect.trigger('change');
+});
+
+$versionSelect.on('change', ({ target }) => {
+  const state = {
+    service: $serviceSelect.val(),
+    apiId: target.value,
+  };
+
+  updateViewByState(state, true);
+});
+
+$(function init() {
+  pageState = getPageState();
+  pageState ? renderUpdatedView(pageState) : renderInitialView();
+});
