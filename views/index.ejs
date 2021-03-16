@@ -6,19 +6,18 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="/javascripts/redoc.standalone_2.0.js"></script>
     <script src="/javascripts/jquery-1.11.0.min.js"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script> -->
     <script>
       const bucketSchema = <%- JSON.stringify(bucketSchema); %>;
       const cookies = <%- JSON.stringify(cookies); %>;
     </script>
   </head>
   <body>
-    <div class="title">
+    <div class="title center">
       <h3>
         <span><%= title %></span>
       </h3>
     </div>
-    <div class="div-dropdown">
+    <div class="div-dropdown center">
 
       <div class="custom-dropdown">
         <select label="Service" id="service"></select>

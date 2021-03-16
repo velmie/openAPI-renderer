@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  open-api:
+    container_name: open-api
+    build: ./
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - AUTH_USER=
+      - AUTH_PASS=
+      - S3_AWS_ACCESS_KEY_ID=
+      - S3_AWS_SECRET_ACCESS_KEY=
+      - S3_BUCKET=

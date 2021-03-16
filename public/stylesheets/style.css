@@ -1,4 +1,9 @@
-div {
+body {
+  margin: 0;
+  padding: 0;
+}
+
+div.center {
   text-align: center;
 }
 
@@ -52,7 +57,12 @@ div {
   border-radius: 3px;
   text-indent: 0.01px;
   text-overflow: '';
-  -webkit-appearance: button; /* hide default arrow in chrome OSX */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.custom-dropdown select::-ms-expand {
+  display: none;
 }
 
 .custom-dropdown::before,
