@@ -8,6 +8,7 @@
 * [Requirements](#requirements)
 * [Setup](#setup)
     * [S3](#s3)
+    * [AWS IAM policy](#aws-iam-policy)
     * [Config](#config)
     * [Authentication](#authentication)
 * [Run locally](#run-locally)
@@ -71,6 +72,32 @@ For example:
             |___v1.0.0 
                 |___openapi.yml   
 ```
+
+**[⬆ back to top](#openapi-renderer)**
+
+#### AWS IAM policy
+
+There is a sample of the policy that can be used to provide the access to AWS S3
+
+Don't forget to replace bucket-for-openapi-docs with your S3 bucket name.
+
+```JSON
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::bucket-for-openapi-docs",
+      "Effect": "Allow"
+    },
+    {
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::bucket-for-openapi-docs/*",
+      "Effect": "Allow"
+    }
+  ]
+}
+````
 
 **[⬆ back to top](#openapi-renderer)**
 
