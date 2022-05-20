@@ -150,9 +150,9 @@ localhost:3000
 #### The Docker way
 [velmie/openapi-renderer](https://hub.docker.com/r/velmie/openapi-renderer)
 ```
-docker pull velmie/openapi-renderer:1.2.1
+docker pull velmie/openapi-renderer:1.2.2
 
-docker run -p 3000:80 -e S3_AWS_ACCESS_KEY_ID="" -e S3_AWS_SECRET_ACCESS_KEY="" -e S3_BUCKET="" velmie/openapi-renderer:1.2.1
+docker run -p 3000:80 -e S3_AWS_ACCESS_KEY_ID="" -e S3_AWS_SECRET_ACCESS_KEY="" -e S3_BUCKET="" velmie/openapi-renderer:1.2.2
 ```
 - Required environment variables:
     * S3_AWS_ACCESS_KEY_ID
