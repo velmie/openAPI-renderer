@@ -38,6 +38,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/docs', docsRouter);
 
+app.get('/health-check', (req, res) => res.status(200).send('Ok'));
+
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
