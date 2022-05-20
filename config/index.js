@@ -13,10 +13,13 @@ const {
   S3_AWS_SECRET_ACCESS_KEY,
 } = process.env;
 
-AWS.config.credentials = {
-  accessKeyId: S3_AWS_ACCESS_KEY_ID,
-  secretAccessKey: S3_AWS_SECRET_ACCESS_KEY,
-};
+// @deprecated
+if (S3_AWS_ACCESS_KEY_ID && S3_AWS_SECRET_ACCESS_KEY) {
+  AWS.config.credentials = {
+    accessKeyId: S3_AWS_ACCESS_KEY_ID,
+    secretAccessKey: S3_AWS_SECRET_ACCESS_KEY,
+  };
+}
 
 const s3 = new AWS.S3({
   apiVersion: S3_API_VERSION,

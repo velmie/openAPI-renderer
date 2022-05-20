@@ -103,9 +103,7 @@ Don't forget to replace bucket-for-openapi-docs with your S3 bucket name.
 
 #### Config
 - Required environment variables:
-    * S3_AWS_ACCESS_KEY_ID
-    * S3_AWS_SECRET_ACCESS_KEY
-    * S3_BUCKET
+    * S3_BUCKET           = bucket-for-openapi-docs
 - Optional environment variables (filled by default):
     * PORT                = 3000
     * CACHE_TTL           = 60000 //60s
@@ -115,6 +113,11 @@ Don't forget to replace bucket-for-openapi-docs with your S3 bucket name.
     * COOKIE_TTL          = 2592000000 //1month
     * AUTH_USER           = ""
     * AUTH_PASS           = ""
+- Optional AWS credentials
+  * AWS_ACCESS_KEY_ID     = AKIAIOSFODNN7EXAMPLE
+  * AWS_SECRET_ACCESS_KEY = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+  * ~~S3_AWS_ACCESS_KEY_ID (deprecated, preferred is ``AWS_ACCESS_KEY_ID``)~~
+  * ~~S3_AWS_SECRET_ACCESS_KEY  (deprecated, preferred is ``AWS_SECRET_ACCESS_KEY``)~~
 
 **[⬆ back to top](#openapi-renderer)**
 
