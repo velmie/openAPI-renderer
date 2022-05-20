@@ -152,11 +152,9 @@ localhost:3000
 ```
 docker pull velmie/openapi-renderer:1.2.2
 
-docker run -p 3000:80 -e S3_AWS_ACCESS_KEY_ID="" -e S3_AWS_SECRET_ACCESS_KEY="" -e S3_BUCKET="" velmie/openapi-renderer:1.2.2
+docker run -p 3000:80 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e S3_BUCKET="" velmie/openapi-renderer:1.2.2
 ```
 - Required environment variables:
-    * S3_AWS_ACCESS_KEY_ID
-    * S3_AWS_SECRET_ACCESS_KEY
     * S3_BUCKET
 - Optional environment variables for [authentication](#authentication):
     * AUTH_USER
