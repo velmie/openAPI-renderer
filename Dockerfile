@@ -1,4 +1,4 @@
-FROM node:8 AS build
+FROM node:14-alpine3.15 AS build
 
 WORKDIR /openapi-renderer
 COPY package*.json ./
@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 
 
-FROM node:alpine
+FROM node:14-alpine3.15
 
 ENV PORT 80
 
