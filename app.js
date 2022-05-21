@@ -10,18 +10,19 @@ const indexRouter = require('./routes/index');
 const docsRouter = require('./routes/docs');
 
 const {
-  AUTH_USER,
-  AUTH_PASS,
+  AUTH_USER, AUTH_PASS,
 } = process.env;
 
 const app = express();
+
+// /health-check shout definition should be above `basicAuth`
+app.get('/health-check', (req, res) => res.status(200).send(''));
 
 if (AUTH_USER && AUTH_PASS) {
   app.use(basicAuth({
     users: {
       [AUTH_USER]: AUTH_PASS,
-    },
-    challenge: true,
+    }, challenge: true,
   }));
 }
 
@@ -37,8 +38,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/docs', docsRouter);
-
-app.get('/health-check', (req, res) => res.status(200).send('Ok'));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

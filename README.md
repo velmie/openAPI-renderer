@@ -127,37 +127,55 @@ You can specify environment variables:
  - AUTH_USER
  - AUTH_PASS
 
-![#f03c15](https://placehold.it/15/f03c15/000000?text=+) If you don't specify environment variables then authorization will be missing
-
+:exclamation::exclamation: If you don't specify environment variables the ['basic authentication'](https://en.wikipedia.org/wiki/Basic_access_authentication) won't be enabled :exclamation::exclamation:
+ 
 **[⬆ back to top](#openapi-renderer)**
 
 ## Run locally
 1. `npm install`
 2. `cp .env.sample .env`
 3. _(Modify .env)_
-4. `npm start`
+4. `npm run start-dev`
 
-#### For debug:
-```bash
-DEBUG=openapi-renderer:* npm start
-```
-
-#### Starting the system:
-```
-localhost:3000
-```
 
 #### The Docker way
 [velmie/openapi-renderer](https://hub.docker.com/r/velmie/openapi-renderer)
 ```
-docker pull velmie/openapi-renderer:1.2.2
+docker pull velmie/openapi-renderer:latest
 
-docker run -p 3000:80 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e S3_BUCKET="" velmie/openapi-renderer:1.2.2
+docker run -p 3000:80 -e AWS_ACCESS_KEY_ID="" -e AWS_SECRET_ACCESS_KEY="" -e S3_BUCKET="" velmie/openapi-renderer:latest
 ```
 - Required environment variables:
     * S3_BUCKET
 - Optional environment variables for [authentication](#authentication):
     * AUTH_USER
     * AUTH_PASS
+
+**[⬆ back to top](#openapi-renderer)**
+
+#### Health check
+
+The health check is available by the following endpoint:
+```
+/health-check
+```
+Curl example:
+```shell
+curl -i --request GET 'http://localhost:3000/health-check'
+
+# Response
+
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: text/html; charset=utf-8
+Content-Length: 0
+ETag: W/"0-2jmj7l5rSw0yVb/vlWAYkK/YBwk"
+Date: Sat, 21 May 2022 14:33:15 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+```
+
+:exclamation: Please note that ``basic authentication`` isn't applied to the ``health check`` endpoint.
+
 
 **[⬆ back to top](#openapi-renderer)**
