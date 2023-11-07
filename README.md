@@ -119,6 +119,14 @@ Don't forget to replace bucket-for-openapi-docs with your S3 bucket name.
   * ~~S3_AWS_ACCESS_KEY_ID (deprecated, preferred is ``AWS_ACCESS_KEY_ID``)~~
   * ~~S3_AWS_SECRET_ACCESS_KEY  (deprecated, preferred is ``AWS_SECRET_ACCESS_KEY``)~~
 
+
+If you have an error with region, please, use the ``AWS_REGION`` environment variable
+
+Error example:
+```bash
+The eu-south-2 location constraint is incompatible for the region specific endpoint this request was sent to.
+```
+
 **[⬆ back to top](#openapi-renderer)**
 
 #### Authentication
